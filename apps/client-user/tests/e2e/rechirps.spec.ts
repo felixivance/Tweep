@@ -154,14 +154,11 @@ test.describe('Rechirps', () => {
     await page.goto('/users/bob', { waitUntil: 'networkidle' });
     await waitForHydration(page);
 
-    // Grab the content of the first rechirpable post for verification
+    // Find the first rechirpable post
     const firstPost = page
       .locator('article')
       .filter({ has: page.locator('button[title="Rechirp"]') })
       .first();
-    const postContent =
-      (await firstPost.locator("a[href*='/posts/']").first().textContent()) ??
-      '';
 
     await firstPost.locator('button[title="Rechirp"]').click();
     await waitForHydration(page);

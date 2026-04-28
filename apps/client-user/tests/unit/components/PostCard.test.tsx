@@ -15,6 +15,11 @@ vi.mock("../../../src/server/functions/bookmarks", () => ({
 	getBookmarkStatus: vi.fn().mockResolvedValue({ bookmarked: false }),
 }));
 
+vi.mock("../../../src/server/functions/rechirps", () => ({
+	toggleRechirp: vi.fn(),
+	getRechirpStatus: vi.fn().mockResolvedValue({ rechirped: false, count: 0 }),
+}));
+
 // Mock TanStack Router Link component
 vi.mock("@tanstack/react-router", () => ({
 	Link: ({ children, to }: { children: React.ReactNode; to: string }) => (
@@ -35,6 +40,7 @@ const mockPost = {
 	},
 	likeCount: 5,
 	commentCount: 3,
+	rechirpCount: 0,
 };
 
 describe("PostCard", () => {

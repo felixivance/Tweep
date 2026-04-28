@@ -1,9 +1,11 @@
 import * as stylex from "@stylexjs/stylex";
 import { AlertCircle, Send } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPost } from "../../server/functions/posts";
+import { searchUsers } from "../../server/functions/search";
 import { colors, radii, semanticColors, spacing } from "../../tokens.stylex";
 import { CharacterCount } from "../shared/CharacterCount";
+import { MentionDropdown } from "./MentionDropdown";
 
 const spin = stylex.keyframes({
 	from: { transform: "rotate(0deg)" },
@@ -104,11 +106,165 @@ const styles = stylex.create({
 	},
 });
 
+interface MentionUser {
+	id: string;
+	username: string;
+	displayName: string;
+	avatarUrl?: string | null;
+}
+
+interface MentionState {
+	open: boolean;
+	users: MentionUser[];
+	activeIndex: number;
+	position: { top: number; left: number };
+	triggerStart: number;
+}
+
+const MENTION_RE = /(^|\s)@([a-zA-Z0-9_]*)$/;
+
+function getCaretCoords(
+	textarea: HTMLTextAreaElement,
+	caretPos: number,
+): { top: number; left: number } {
+	const mirror = document.createElement("div");
+	const computed = window.getComputedStyle(textarea);
+
+	mirror.style.cssText = [
+		"position:absolute",
+		"visibility:hidden",
+		"overflow:hidden",
+		"white-space:pre-wrap",
+		"word-wrap:break-word",
+		`width:${computed.width}`,
+		`padding:${computed.padding}`,
+		`font:${computed.font}`,
+		`line-height:${computed.lineHeight}`,
+		`border:${computed.border}`,
+		`box-sizing:${computed.boxSizing}`,
+	].join(";");
+
+	const textBefore = textarea.value.substring(0, caretPos);
+	mirror.textContent = textBefore;
+
+	const caret = document.createElement("span");
+	caret.textContent = "​";
+	mirror.appendChild(caret);
+
+	textarea.parentElement?.appendChild(mirror);
+	const caretRect = caret.getBoundingClientRect();
+	const wrapperRect = textarea.parentElement!.getBoundingClientRect();
+	mirror.remove();
+
+	return {
+		top: caretRect.bottom - wrapperRect.top + 4,
+		left: caretRect.left - wrapperRect.left,
+	};
+}
+
 export function PostForm({ onSuccess }: { onSuccess?: () => void }) {
 	const [content, setContent] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 	const [isFocused, setIsFocused] = useState(false);
+	const [mention, setMention] = useState<MentionState>({
+		open: false,
+		users: [],
+		activeIndex: 0,
+		position: { top: 0, left: 0 },
+		triggerStart: 0,
+	});
+
+	const textareaRef = useRef<HTMLTextAreaElement>(null);
+	const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+	const closeMention = useCallback(() => {
+		setMention((m) => ({ ...m, open: false, users: [], activeIndex: 0 }));
+	}, []);
+
+	const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		const value = e.target.value;
+		setContent(value);
+
+		const cursor = e.target.selectionStart ?? value.length;
+		const textBeforeCursor = value.substring(0, cursor);
+		const match = MENTION_RE.exec(textBeforeCursor);
+
+		if (!match) {
+			closeMention();
+			return;
+		}
+
+		const query = match[2];
+		const triggerStart = textBeforeCursor.lastIndexOf("@");
+		const coords = getCaretCoords(e.target, triggerStart);
+
+		setMention((m) => ({ ...m, open: true, triggerStart, position: coords, activeIndex: 0 }));
+
+		if (debounceRef.current) clearTimeout(debounceRef.current);
+		debounceRef.current = setTimeout(async () => {
+			try {
+				const users = await searchUsers({ data: query });
+				setMention((m) => (m.open ? { ...m, users } : m));
+			} catch {
+				// silently ignore
+			}
+		}, 200);
+	};
+
+	const selectUser = useCallback(
+		(user: MentionUser) => {
+			const textarea = textareaRef.current;
+			if (!textarea) return;
+
+			const cursor = textarea.selectionStart ?? content.length;
+			const before = content.substring(0, mention.triggerStart);
+			const after = content.substring(cursor);
+			const newContent = `${before}@${user.username} ${after}`;
+			setContent(newContent);
+			closeMention();
+
+			// Restore focus and place cursor after inserted mention
+			requestAnimationFrame(() => {
+				textarea.focus();
+				const newCursor = before.length + user.username.length + 2;
+				textarea.setSelectionRange(newCursor, newCursor);
+			});
+		},
+		[content, mention.triggerStart, closeMention],
+	);
+
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+		if (!mention.open) return;
+
+		if (e.key === "ArrowDown") {
+			e.preventDefault();
+			setMention((m) => ({
+				...m,
+				activeIndex: Math.min(m.activeIndex + 1, m.users.length - 1),
+			}));
+		} else if (e.key === "ArrowUp") {
+			e.preventDefault();
+			setMention((m) => ({
+				...m,
+				activeIndex: Math.max(m.activeIndex - 1, 0),
+			}));
+		} else if (e.key === "Enter" || e.key === "Tab") {
+			if (mention.users.length > 0) {
+				e.preventDefault();
+				selectUser(mention.users[mention.activeIndex]);
+			}
+		} else if (e.key === "Escape") {
+			e.preventDefault();
+			closeMention();
+		}
+	};
+
+	useEffect(() => {
+		return () => {
+			if (debounceRef.current) clearTimeout(debounceRef.current);
+		};
+	}, []);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -120,6 +276,7 @@ export function PostForm({ onSuccess }: { onSuccess?: () => void }) {
 		try {
 			await createPost({ data: { content } });
 			setContent("");
+			closeMention();
 			onSuccess?.();
 		} catch (err) {
 			setError(err instanceof Error ? err.message : "Failed to create post");
@@ -139,15 +296,28 @@ export function PostForm({ onSuccess }: { onSuccess?: () => void }) {
 
 			<div {...stylex.props(styles.inputWrapper, isFocused && styles.inputWrapperFocused)}>
 				<textarea
+					ref={textareaRef}
 					value={content}
-					onChange={(e) => setContent(e.target.value)}
+					onChange={handleContentChange}
+					onKeyDown={handleKeyDown}
 					onFocus={() => setIsFocused(true)}
-					onBlur={() => setIsFocused(false)}
+					onBlur={() => {
+						setIsFocused(false);
+						setTimeout(closeMention, 150);
+					}}
 					placeholder="What's happening?"
 					{...stylex.props(styles.textarea)}
 					rows={3}
 					maxLength={280}
 				/>
+				{mention.open && (
+					<MentionDropdown
+						users={mention.users}
+						activeIndex={mention.activeIndex}
+						position={mention.position}
+						onSelect={selectUser}
+					/>
+				)}
 			</div>
 
 			<div {...stylex.props(styles.footer)}>
