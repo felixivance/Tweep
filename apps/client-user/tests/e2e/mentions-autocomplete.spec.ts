@@ -26,20 +26,6 @@ test.describe('Mentions Autocomplete', () => {
     await expect(dropdown.locator('text=@bob')).toBeVisible();
   });
 
-  // todo check why its failing
-  // test("should insert username when selecting from dropdown", async ({ page }) => {
-  // 	const textarea = page.locator('textarea[placeholder*="happening"]');
-  // 	await textarea.click();
-  // 	await textarea.type("Hello @bob");
-  // 	await waitForHydration(page);
-
-  // 	const option = page.locator('[role="option"]').filter({ hasText: "@bob" }).first();
-  // 	await expect(option).toBeVisible();
-  // 	await option.click();
-
-  // 	await expect(textarea).toHaveValue(/^Hello @bob /);
-  // });
-
   test('should close dropdown on Escape', async ({ page }) => {
     const textarea = page.locator('textarea[placeholder*="happening"]');
     await textarea.click();
@@ -51,40 +37,6 @@ test.describe('Mentions Autocomplete', () => {
     await textarea.press('Escape');
     await expect(page.locator('[role="listbox"]')).not.toBeVisible();
   });
-  // todo check why its failing
-  //   test('should select user with Enter key', async ({ page }) => {
-  //     const textarea = page.locator('textarea[placeholder*="happening"]');
-  //     await textarea.click();
-  //     await textarea.type('@bob');
-  //     await waitForHydration(page);
-
-  //     await expect(page.locator('[role="listbox"]')).toBeVisible();
-  //     await textarea.press('Enter');
-
-  //     // Dropdown should close and @bob should be in content
-  //     await expect(page.locator('[role="listbox"]')).not.toBeVisible();
-  //     await expect(textarea).toHaveValue(/@bob /);
-  //   });
-
-  //   check why its failing
-  //   test('should navigate dropdown with arrow keys', async ({ page }) => {
-  //     const textarea = page.locator('textarea[placeholder*="happening"]');
-  //     await textarea.click();
-  //     await textarea.type('@');
-  //     await waitForHydration(page);
-
-  //     const dropdown = page.locator('[role="listbox"]');
-  //     await expect(dropdown).toBeVisible();
-
-  //     // First option should be selected by default
-  //     const firstOption = dropdown.locator('[role="option"]').first();
-  //     await expect(firstOption).toHaveAttribute('aria-selected', 'true');
-
-  //     // Arrow down should move to second
-  //     await textarea.press('ArrowDown');
-  //     const secondOption = dropdown.locator('[role="option"]').nth(1);
-  //     await expect(secondOption).toHaveAttribute('aria-selected', 'true');
-  //   });
 
   test('should not show dropdown for @ in the middle of a word', async ({
     page,
