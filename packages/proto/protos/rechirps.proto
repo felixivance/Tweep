@@ -1,0 +1,36 @@
+syntax = "proto3";
+package chirp.rechirps;
+
+import "common.proto";
+import "posts.proto";
+
+service RechirpsService {
+  rpc ToggleRechirp(ToggleRechirpRequest) returns (RechirpResponse);
+  rpc GetRechirpStatus(GetRechirpStatusRequest) returns (RechirpStatusResponse);
+  rpc GetUserRechirps(GetUserRechirpsRequest) returns (chirp.posts.PostsResponse);
+}
+
+message ToggleRechirpRequest {
+  string session_token = 1;
+  string post_id = 2;
+}
+
+message RechirpResponse {
+  bool success = 1;
+  bool rechirped = 2;
+  optional string error = 3;
+}
+
+message GetRechirpStatusRequest {
+  string session_token = 1;
+  string post_id = 2;
+}
+
+message RechirpStatusResponse {
+  bool rechirped = 1;
+}
+
+message GetUserRechirpsRequest {
+  string username = 1;
+  optional string session_token = 2;
+}

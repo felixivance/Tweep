@@ -60,6 +60,7 @@ export const getBookmarkedPosts = createServerFn()
 				: null,
 			likeCount: post.likeCount,
 			commentCount: post.commentCount,
+			rechirpCount: 0,
 			isLiked: post.isLiked,
 		}));
 	});

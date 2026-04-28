@@ -9,6 +9,7 @@ import { UserAvatar } from "../../components/users/UserAvatar";
 import { getCurrentUser } from "../../server/functions/auth";
 import { getFollowerCount, getFollowingCount } from "../../server/functions/follows";
 import { getUserPosts } from "../../server/functions/posts";
+import { getUserRechirps } from "../../server/functions/rechirps";
 import { getUser } from "../../server/functions/users";
 import {
 	colors,
@@ -178,15 +179,30 @@ function UserProfilePage() {
 
 	const loadData = async () => {
 		try {
-			const [profileUser, userPosts, currentU, followers, following] = await Promise.all([
-				getUser({ data: username }),
-				getUserPosts({ data: username }),
-				getCurrentUser(),
-				getFollowerCount({ data: username }),
-				getFollowingCount({ data: username }),
-			]);
+			const [profileUser, userPosts, rawRechirps, currentU, followers, following] =
+				await Promise.all([
+					getUser({ data: username }),
+					getUserPosts({ data: username }),
+					getUserRechirps({ data: username }),
+					getCurrentUser(),
+					getFollowerCount({ data: username }),
+					getFollowingCount({ data: username }),
+				]);
+
+			// Attach the rechirpedBy display name now that we have the profile user's full info
+			const rechirps = rawRechirps.map((post) => ({
+				...post,
+				rechirpedBy: {
+					username,
+					displayName: profileUser?.displayName ?? username,
+				},
+			}));
+
 			setUser(profileUser);
-			setPosts(userPosts);
+			const combined = [...userPosts, ...rechirps].sort(
+				(a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+			);
+			setPosts(combined);
 			setCurrentUser(currentU);
 			setFollowerCount(followers);
 			setFollowingCount(following);

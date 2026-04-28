@@ -47,3 +47,4 @@ packages/proto/generated/*
 count.txt
 todos.json
 *.log
+.rechirps-stub.json

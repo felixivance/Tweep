@@ -76,6 +76,11 @@ interface Post {
 	};
 	likeCount: number;
 	commentCount: number;
+	rechirpCount: number;
+	rechirpedBy?: {
+		username: string;
+		displayName: string;
+	};
 }
 
 export function PostList({

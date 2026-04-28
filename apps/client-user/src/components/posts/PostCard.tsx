@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { Link } from "@tanstack/react-router";
-import { Edit, Heart, MessageCircle, Trash2 } from "lucide-react";
+import { Edit, Heart, MessageCircle, Repeat2, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { togglePostLike } from "../../server/functions/likes";
 import { deletePost } from "../../server/functions/posts";
@@ -9,6 +9,7 @@ import { ParsedContent } from "../shared/ParsedContent";
 import { RelativeTime } from "../shared/RelativeTime";
 import { UserAvatar } from "../users/UserAvatar";
 import { BookmarkButton } from "./BookmarkButton";
+import { RechirpButton } from "./RechirpButton";
 
 const fadeInUp = stylex.keyframes({
 	from: {
@@ -42,6 +43,18 @@ const styles = stylex.create({
 		":hover": {
 			boxShadow: shadows.md,
 		},
+	},
+	rechirpBanner: {
+		display: "flex",
+		alignItems: "center",
+		gap: spacing.xs,
+		marginBottom: spacing.sm,
+		color: semanticColors.textTertiary,
+		fontSize: "0.8125rem",
+		fontWeight: 500,
+	},
+	rechirpBannerIcon: {
+		color: colors.emerald500,
 	},
 	container: {
 		display: "flex",
@@ -208,6 +221,11 @@ interface PostCardProps {
 		};
 		likeCount: number;
 		commentCount: number;
+		rechirpCount: number;
+		rechirpedBy?: {
+			username: string;
+			displayName: string;
+		};
 	};
 	currentUserId?: string;
 	onDelete?: () => void;
@@ -258,6 +276,22 @@ export function PostCard({ post, currentUserId, onDelete }: PostCardProps) {
 
 	return (
 		<article {...stylex.props(styles.article)}>
+			{post.rechirpedBy && (
+				<div {...stylex.props(styles.rechirpBanner)}>
+					<Repeat2 size={14} {...stylex.props(styles.rechirpBannerIcon)} />
+					<span>
+						<Link
+							to="/users/$username"
+							params={{ username: post.rechirpedBy.username }}
+							{...stylex.props(styles.displayName)}
+						>
+							{post.rechirpedBy.displayName}
+						</Link>{" "}
+						rechirped
+					</span>
+				</div>
+			)}
+
 			<div {...stylex.props(styles.container)}>
 				<Link to="/users/$username" params={{ username: post.author.username }}>
 					<UserAvatar avatarUrl={post.author.avatarUrl} username={post.author.username} />
@@ -319,6 +353,12 @@ export function PostCard({ post, currentUserId, onDelete }: PostCardProps) {
 							<MessageCircle size={20} />
 							<span {...stylex.props(styles.actionCount)}>{post.commentCount}</span>
 						</Link>
+
+						<RechirpButton
+							postId={post.id}
+							initialCount={post.rechirpCount}
+							disabled={isOwnPost}
+						/>
 
 						<BookmarkButton postId={post.id} />
 

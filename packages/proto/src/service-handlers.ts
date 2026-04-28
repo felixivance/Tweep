@@ -79,6 +79,12 @@ import type {
 	ReviewReportResponse,
 	// Search
 	SearchRequest,
+	// Rechirps
+	GetRechirpStatusRequest,
+	GetUserRechirpsRequest,
+	RechirpResponse,
+	RechirpStatusResponse,
+	ToggleRechirpRequest,
 	// Bookmarks
 	ToggleBookmarkRequest,
 	ToggleCommentLikeRequest,
@@ -186,6 +192,13 @@ export interface INotificationsService {
 	markAsRead(request: MarkAsReadRequest): Promise<MarkAsReadResponse>;
 	markAllAsRead(request: MarkAllAsReadRequest): Promise<MarkAllAsReadResponse>;
 	deleteNotification(request: DeleteNotificationRequest): Promise<DeleteNotificationResponse>;
+}
+
+// Rechirps Service Handler
+export interface IRechirpsService {
+	toggleRechirp(request: ToggleRechirpRequest): Promise<RechirpResponse>;
+	getRechirpStatus(request: GetRechirpStatusRequest): Promise<RechirpStatusResponse>;
+	getUserRechirps(request: GetUserRechirpsRequest): Promise<PostsResponse>;
 }
 
 // Bookmarks Service Handler

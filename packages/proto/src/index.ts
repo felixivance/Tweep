@@ -28,6 +28,9 @@ export * from "../generated/notifications.client";
 // Posts
 export * from "../generated/posts";
 export * from "../generated/posts.client";
+// Rechirps
+export * from "../generated/rechirps";
+export * from "../generated/rechirps.client";
 // Search
 export * from "../generated/search";
 export * from "../generated/search.client";
