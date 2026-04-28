@@ -275,7 +275,7 @@ export function PostCard({ post, currentUserId, onDelete }: PostCardProps) {
 	};
 
 	return (
-		<article {...stylex.props(styles.article)}>
+		<article data-post-id={post.id} {...stylex.props(styles.article)}>
 			{post.rechirpedBy && (
 				<div {...stylex.props(styles.rechirpBanner)}>
 					<Repeat2 size={14} {...stylex.props(styles.rechirpBannerIcon)} />
