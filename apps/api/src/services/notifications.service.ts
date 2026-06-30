@@ -1,4 +1,4 @@
-import { and, desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, sql } from "drizzle-orm";
 import { db, schema } from "../db";
 import { generateId } from "./utils";
 
@@ -63,37 +63,27 @@ export async function getUserNotifications(userId: string, limit = 20, offset = 
 		.limit(limit)
 		.offset(offset);
 
-	// Enrich with post/comment content preview if applicable
-	const enrichedResults = await Promise.all(
-		results.map(async (notification) => {
-			let postContent: string | null = null;
-			let commentContent: string | null = null;
+	// Collect all referenced post/comment IDs, then batch-fetch in 2 queries
+	const postIds = results.map((n) => n.postId).filter((id): id is string => id !== null);
+	const commentIds = results.map((n) => n.commentId).filter((id): id is string => id !== null);
 
-			if (notification.postId) {
-				const post = await db
-					.select({ content: posts.content })
-					.from(posts)
-					.where(eq(posts.id, notification.postId))
-					.get();
-				postContent = post?.content?.substring(0, 100) || null;
-			}
+	const [postRows, commentRows] = await Promise.all([
+		postIds.length > 0
+			? db.select({ id: posts.id, content: posts.content }).from(posts).where(inArray(posts.id, postIds))
+			: [],
+		commentIds.length > 0
+			? db.select({ id: comments.id, content: comments.content }).from(comments).where(inArray(comments.id, commentIds))
+			: [],
+	]);
 
-			if (notification.commentId) {
-				const comment = await db
-					.select({ content: comments.content })
-					.from(comments)
-					.where(eq(comments.id, notification.commentId))
-					.get();
-				commentContent = comment?.content?.substring(0, 100) || null;
-			}
+	const postContentMap = new Map(postRows.map((p) => [p.id, p.content.substring(0, 100)]));
+	const commentContentMap = new Map(commentRows.map((c) => [c.id, c.content.substring(0, 100)]));
 
-			return {
-				...notification,
-				postContent,
-				commentContent,
-			};
-		}),
-	);
+	const enrichedResults = results.map((notification) => ({
+		...notification,
+		postContent: notification.postId ? (postContentMap.get(notification.postId) ?? null) : null,
+		commentContent: notification.commentId ? (commentContentMap.get(notification.commentId) ?? null) : null,
+	}));
 
 	return enrichedResults;
 }
