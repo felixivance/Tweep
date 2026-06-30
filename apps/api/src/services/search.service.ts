@@ -1,4 +1,8 @@
 import { and, desc, eq, like, or, sql } from "drizzle-orm";
+
+function escapeLike(value: string): string {
+	return value.replace(/\\/g, "\\\\").replace(/%/g, "\\%").replace(/_/g, "\\_");
+}
 import { db, schema } from "../db";
 
 const { posts, users, likes, comments } = schema;
@@ -38,7 +42,7 @@ export async function searchPosts(query: string, userId?: string) {
 		return [];
 	}
 
-	const searchPattern = `%${query}%`;
+	const searchPattern = `%${escapeLike(query)}%`;
 
 	const result = await db
 		.select({
@@ -74,7 +78,7 @@ export async function searchUsers(query: string) {
 		return [];
 	}
 
-	const searchPattern = `%${query}%`;
+	const searchPattern = `%${escapeLike(query)}%`;
 
 	const result = await db
 		.select({

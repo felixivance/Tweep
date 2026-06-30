@@ -2,6 +2,10 @@ import { desc, eq, gte, like, or, sql } from "drizzle-orm";
 import { db, schema } from "../db";
 import { generateId } from "./utils";
 
+function escapeLike(value: string): string {
+	return value.replace(/\\/g, "\\\\").replace(/%/g, "\\%").replace(/_/g, "\\_");
+}
+
 const { users, posts, comments, reports, auditLogs } = schema;
 
 interface ListUsersOptions {
@@ -40,7 +44,7 @@ export async function listUsers(options: ListUsersOptions = {}) {
 		.$dynamic();
 
 	if (options.searchQuery) {
-		const pattern = `%${options.searchQuery}%`;
+		const pattern = `%${escapeLike(options.searchQuery)}%`;
 		query = query.where(
 			or(
 				like(users.username, pattern),
