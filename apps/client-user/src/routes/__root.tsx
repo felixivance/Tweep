@@ -1,5 +1,10 @@
 import { TanStackDevtools } from '@tanstack/react-devtools';
-import { createRootRoute, HeadContent, Scripts } from '@tanstack/react-router';
+import {
+  ScrollRestoration,
+  createRootRoute,
+  HeadContent,
+  Scripts,
+} from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { useEffect, useState } from 'react';
 
@@ -92,6 +97,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <Header />
         {children}
+        <ScrollRestoration />
         <KeyboardController />
         <TanStackDevtools
           config={{

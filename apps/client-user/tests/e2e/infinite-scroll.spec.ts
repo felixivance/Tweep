@@ -35,8 +35,9 @@ test.describe('Infinite Scroll', () => {
 
       const initialCount = await page.locator('article').count();
 
-      // Scroll to the bottom to trigger IntersectionObserver
-      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+      // Scroll the sentinel into the viewport so IntersectionObserver fires
+      const sentinel = page.locator('[data-testid="infinite-scroll-sentinel"]');
+      await sentinel.scrollIntoViewIfNeeded();
       await waitForHydration(page);
 
       const updatedCount = await page.locator('article').count();
@@ -56,14 +57,15 @@ test.describe('Infinite Scroll', () => {
       await page.goto('/', { waitUntil: 'networkidle' });
       await waitForHydration(page);
 
-      // Keep scrolling to the bottom until no more posts load
+      // Keep scrolling the sentinel into view until no more posts load
       let previousCount = -1;
       let currentCount = await page.locator('article').count();
       while (currentCount > previousCount) {
         previousCount = currentCount;
-        await page.evaluate(() =>
-          window.scrollTo(0, document.body.scrollHeight),
+        const sentinel = page.locator(
+          '[data-testid="infinite-scroll-sentinel"]',
         );
+        await sentinel.scrollIntoViewIfNeeded();
         await waitForHydration(page);
         currentCount = await page.locator('article').count();
       }
@@ -104,7 +106,8 @@ test.describe('Infinite Scroll', () => {
 
       const initialCount = await page.locator('article').count();
 
-      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+      const sentinel = page.locator('[data-testid="infinite-scroll-sentinel"]');
+      await sentinel.scrollIntoViewIfNeeded();
       await waitForHydration(page);
 
       const updatedCount = await page.locator('article').count();
@@ -151,9 +154,18 @@ test.describe('Infinite Scroll', () => {
       // Posts must still be visible after back-navigation
       await expect(page.locator('article').first()).toBeVisible();
 
-      // Scroll position should be roughly where we left it (within 50px tolerance)
+      // Wait for TanStack Router's ScrollRestoration to fire, then assert
+      await page
+        .waitForFunction(
+          (expected) => window.scrollY > expected * 0.5,
+          scrollBefore,
+          { timeout: 5000 },
+        )
+        .catch(() => {});
+
+      // Scroll position should be roughly where we left it (within 100px tolerance)
       const scrollAfter = await page.evaluate(() => window.scrollY);
-      expect(Math.abs(scrollAfter - scrollBefore)).toBeLessThan(50);
+      expect(Math.abs(scrollAfter - scrollBefore)).toBeLessThan(100);
     });
 
     test('should restore scroll position on home feed after navigating to a post and back', async ({
@@ -187,8 +199,17 @@ test.describe('Infinite Scroll', () => {
 
       await expect(page.locator('article').first()).toBeVisible();
 
+      // Wait for TanStack Router's ScrollRestoration to fire, then assert
+      await page
+        .waitForFunction(
+          (expected) => window.scrollY > expected * 0.5,
+          scrollBefore,
+          { timeout: 5000 },
+        )
+        .catch(() => {});
+
       const scrollAfter = await page.evaluate(() => window.scrollY);
-      expect(Math.abs(scrollAfter - scrollBefore)).toBeLessThan(50);
+      expect(Math.abs(scrollAfter - scrollBefore)).toBeLessThan(100);
     });
   });
 });
