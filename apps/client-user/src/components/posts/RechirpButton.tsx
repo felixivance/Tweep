@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { Repeat2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getRechirpStatus, toggleRechirp } from "../../server/functions/rechirps";
 import { colors, radii, spacing } from "../../tokens.stylex";
 
@@ -49,11 +49,7 @@ export function RechirpButton({ postId, initialCount = 0, disabled = false }: Re
 	const [count, setCount] = useState(initialCount);
 	const [loading, setLoading] = useState(false);
 
-	useEffect(() => {
-		loadStatus();
-	}, [postId]);
-
-	const loadStatus = async () => {
+	const loadStatus = useCallback(async () => {
 		try {
 			const status = await getRechirpStatus({ data: postId });
 			setRechirped(status.rechirped);
@@ -62,7 +58,11 @@ export function RechirpButton({ postId, initialCount = 0, disabled = false }: Re
 			// User might not be logged in
 			console.error("Failed to load rechirp status:", error);
 		}
-	};
+	}, [postId]);
+
+	useEffect(() => {
+		loadStatus();
+	}, [loadStatus]);
 
 	const handleToggle = async () => {
 		if (loading || disabled) return;
