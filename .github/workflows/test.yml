@@ -24,7 +24,7 @@ jobs:
         timeout-minutes: 6
 
       - name: Run sanity check tests
-        uses: speechify-recruiting/llm-test-action@main
+        uses: felixivance/llm-test-action@main
         id: llm-test-action
         with:
           test-type: "llm-web-test"
