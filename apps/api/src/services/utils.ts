@@ -1,4 +1,4 @@
-import { createHash } from "crypto";
+import { createHash, timingSafeEqual } from "crypto";
 
 /**
  * Generate a simple ID
@@ -21,7 +21,7 @@ export async function hashPassword(password: string): Promise<string> {
  */
 export async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
 	const hash = await hashPassword(password);
-	return hash === hashedPassword;
+	return timingSafeEqual(Buffer.from(hash, "hex"), Buffer.from(hashedPassword, "hex"));
 }
 
 /**
