@@ -2,8 +2,6 @@
 
 A Twitter-like social media platform built as a monorepo with TanStack Start, React 19, gRPC, StyleX, and SQLite.
 
-> NOTE: Task details are documented in TASK.md
-
 ## Architecture
 
 Chirp is a full-stack monorepo application with:
@@ -32,10 +30,10 @@ pnpm run dev
 
 ### Service URLs
 
-| Service | URL | Description |
-|---------|-----|-------------|
-| User App | http://localhost:3000 | Main social media interface |
-| Admin App | http://localhost:3002 | Admin dashboard |
+| Service    | URL                   | Description                        |
+| ---------- | --------------------- | ---------------------------------- |
+| User App   | http://localhost:3000 | Main social media interface        |
+| Admin App  | http://localhost:3002 | Admin dashboard                    |
 | API Server | http://localhost:3001 | gRPC API (health check at /health) |
 
 ## Test Accounts
@@ -43,6 +41,7 @@ pnpm run dev
 After running the seed script:
 
 ### Regular Users
+
 - alice@test.com / password123
 - bob@test.com / password123
 - charlie@test.com / password123
@@ -50,6 +49,7 @@ After running the seed script:
 - eve@test.com / password123
 
 ### Admin User
+
 - admin@chirp.com / admin123
 
 ## Features
@@ -57,6 +57,7 @@ After running the seed script:
 ### User Application
 
 #### Core Features
+
 - **Authentication** - Email/password registration, login, session management
 - **Posts (Chirps)** - Create, edit (within 5 min), delete text posts (max 280 chars)
 - **Comments** - Add/delete comments, nested threads (1 level deep)
@@ -65,11 +66,13 @@ After running the seed script:
 - **Follow System** - Follow/unfollow users, follower/following counts
 
 #### Feed & Discovery
+
 - **Home Feed** - Posts from followed users
 - **Explore Feed** - All recent posts
 - **Search** - Find posts by content, users by name/username
 
 #### Engagement Features
+
 - **Bookmarks** - Save posts for later, dedicated bookmarks page
 - **Notifications** - Alerts for likes, comments, follows, and mentions
 - **Mentions** - @username linking in posts and comments
@@ -174,21 +177,22 @@ pnpm run test:e2e         # Run E2E tests only (client apps)
 
 ## Tech Stack
 
-| Category | Technology |
-|----------|------------|
-| **Monorepo** | Turborepo + pnpm workspaces |
-| **Framework** | TanStack Start (React 19) |
-| **Language** | TypeScript (strict mode) |
-| **Styling** | StyleX |
-| **API** | gRPC with Protocol Buffers |
-| **Database** | SQLite with Drizzle ORM |
-| **Linting** | Biome |
-| **Testing** | Vitest (unit) + Playwright (E2E) |
-| **Package Manager** | pnpm |
+| Category            | Technology                       |
+| ------------------- | -------------------------------- |
+| **Monorepo**        | Turborepo + pnpm workspaces      |
+| **Framework**       | TanStack Start (React 19)        |
+| **Language**        | TypeScript (strict mode)         |
+| **Styling**         | StyleX                           |
+| **API**             | gRPC with Protocol Buffers       |
+| **Database**        | SQLite with Drizzle ORM          |
+| **Linting**         | Biome                            |
+| **Testing**         | Vitest (unit) + Playwright (E2E) |
+| **Package Manager** | pnpm                             |
 
 ## Database Schema
 
 ### Core Tables
+
 - `users` - User accounts and profiles
 - `posts` - User posts/chirps
 - `comments` - Post comments
@@ -196,6 +200,7 @@ pnpm run test:e2e         # Run E2E tests only (client apps)
 - `follows` - User follow relationships
 
 ### Feature Tables
+
 - `bookmarks` - Saved posts
 - `notifications` - User notifications
 - `reports` - Content reports
