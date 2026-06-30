@@ -9,6 +9,7 @@ overrides:
   shell-quote: ^1.8.4
   vitest: ^3.2.6
   rollup: ^4.59.0
+  undici: ^7.24.0
 
 importers:
 
@@ -3314,8 +3315,8 @@ packages:
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
-  undici@7.19.2:
-    resolution: {integrity: sha512-4VQSpGEGsWzk0VYxyB/wVX/Q7qf9t5znLRgs0dzszr9w9Fej/8RVNQ+S20vdXSAyra/bJ7ZQfGv6ZMj7UEbzSg==}
+  undici@7.28.0:
+    resolution: {integrity: sha512-cRZYrTDwWznlnRiPjggAGxZXanty6M8RV1ff8Wm4LWXBp7/IG8v5DnOm74DtUBp9OONpK75YlPnIjQqX0dBDtA==}
     engines: {node: '>=20.18.1'}
 
   unenv@2.0.0-rc.24:
@@ -5119,7 +5120,7 @@ snapshots:
       parse5: 7.3.0
       parse5-htmlparser2-tree-adapter: 7.1.0
       parse5-parser-stream: 7.1.2
-      undici: 7.19.2
+      undici: 7.28.0
       whatwg-mimetype: 4.0.0
 
   chokidar@3.6.0:
@@ -5837,7 +5838,7 @@ snapshots:
       oxc-minify: 0.111.0
       oxc-transform: 0.111.0
       srvx: 0.10.1
-      undici: 7.19.2
+      undici: 7.28.0
       unenv: 2.0.0-rc.24
       unstorage: 2.0.0-alpha.5(db0@0.3.4(@libsql/client@0.17.0)(drizzle-orm@0.45.1(@libsql/client@0.17.0)(kysely@0.28.10)))(lru-cache@11.2.5)(ofetch@2.0.0-alpha.3)
     optionalDependencies:
@@ -6270,7 +6271,7 @@ snapshots:
 
   undici-types@6.21.0: {}
 
-  undici@7.19.2: {}
+  undici@7.28.0: {}
 
   unenv@2.0.0-rc.24:
     dependencies:
