@@ -6,8 +6,9 @@ import {
 	getGrpcSessionToken,
 	requireGrpcSessionToken,
 } from "../../lib/grpc.server";
+import { getRechirpCountMap } from "../rechirps-stub.server";
 
-function mapPostResponse(post: PostResponse) {
+function mapPostResponse(post: PostResponse, rechirpCounts: Map<string, number>) {
 	return {
 		id: post.id,
 		content: post.content,
@@ -23,7 +24,7 @@ function mapPostResponse(post: PostResponse) {
 			: null,
 		likeCount: post.likeCount,
 		commentCount: post.commentCount,
-		rechirpCount: 0,
+		rechirpCount: rechirpCounts.get(post.id) ?? 0,
 		isLiked: post.isLiked,
 	};
 }
@@ -42,7 +43,8 @@ export const getHomeFeed = createServerFn()
 			},
 		});
 
-		return response.posts.map(mapPostResponse);
+		const rechirpCounts = getRechirpCountMap();
+		return response.posts.map((p) => mapPostResponse(p, rechirpCounts));
 	});
 
 export const getExploreFeed = createServerFn()
@@ -59,5 +61,6 @@ export const getExploreFeed = createServerFn()
 			},
 		});
 
-		return response.posts.map(mapPostResponse);
+		const rechirpCounts = getRechirpCountMap();
+		return response.posts.map((p) => mapPostResponse(p, rechirpCounts));
 	});

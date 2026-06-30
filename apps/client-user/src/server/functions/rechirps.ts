@@ -47,6 +47,7 @@ function readDb(): RechirpRecord[] {
 	}
 }
 
+
 function writeDb(records: RechirpRecord[]): void {
 	writeFileSync(STUB_DB_PATH, JSON.stringify(records, null, 2), "utf-8");
 }

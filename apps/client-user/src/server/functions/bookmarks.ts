@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { fromProtoTimestamp, getGrpcClient, requireGrpcSessionToken } from "../../lib/grpc.server";
+import { getRechirpCountMap } from "../rechirps-stub.server";
 
 export const toggleBookmark = createServerFn({ method: "POST" })
 	.inputValidator((d: string) => d)
@@ -45,6 +46,7 @@ export const getBookmarkedPosts = createServerFn()
 			offset: data.offset || 0,
 		});
 
+		const rechirpCounts = getRechirpCountMap();
 		return response.posts.map((post) => ({
 			id: post.id,
 			content: post.content,
@@ -60,7 +62,7 @@ export const getBookmarkedPosts = createServerFn()
 				: null,
 			likeCount: post.likeCount,
 			commentCount: post.commentCount,
-			rechirpCount: 0,
+			rechirpCount: rechirpCounts.get(post.id) ?? 0,
 			isLiked: post.isLiked,
 		}));
 	});
