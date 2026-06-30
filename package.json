@@ -31,7 +31,8 @@
       "rollup": "^4.59.0",
       "undici": "^7.24.0",
       "vite": "^7.3.5",
-      "kysely": "^0.28.12"
+      "kysely": "^0.28.12",
+      "picomatch": "^2.3.2"
     }
   },
   "devDependencies": {
