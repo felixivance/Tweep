@@ -10,6 +10,14 @@ vi.mock("../../../src/server/functions/search", () => ({
 	searchUsers: vi.fn().mockResolvedValue([]),
 }));
 
+vi.mock("../../../src/lib/usePostDraft", () => ({
+	postDraft: {
+		read: vi.fn().mockReturnValue(null),
+		save: vi.fn(),
+		clear: vi.fn(),
+	},
+}));
+
 describe("PostForm", () => {
 	it("renders textarea and submit button", () => {
 		render(<PostForm />);
