@@ -29,6 +29,6 @@
 		"@faker-js/faker": "^9.3.0",
 		"turbo": "^2.3.3",
 		"typescript": "^5.7.2",
-		"vitest": "^3.0.5"
+		"vitest": "^3.2.6"
 	}
 }
