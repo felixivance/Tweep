@@ -1,4 +1,4 @@
-import type { IFollowsService } from "@chirp/proto";
+import type { IFollowsService } from "@tweep/proto";
 import { validateSessionToken } from "../../middleware/auth";
 import {
 	getFollowerCount,

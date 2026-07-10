@@ -1,4 +1,4 @@
-import type { IAuthService } from "@chirp/proto";
+import type { IAuthService } from "@tweep/proto";
 import { validateSessionToken } from "../../middleware/auth";
 import { getCurrentUser, loginUser, registerUser } from "../../services/auth.service";
 import { toProtoTimestamp } from "../../services/utils";

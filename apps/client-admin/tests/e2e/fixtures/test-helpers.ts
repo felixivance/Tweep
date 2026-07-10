@@ -5,14 +5,14 @@ import { expect, type Page } from "@playwright/test";
  */
 export const ADMIN_USERS = {
 	admin: {
-		email: "admin@chirp.test",
+		email: "admin@tweep.test",
 		password: "admin123",
 		username: "admin",
 		displayName: "Admin User",
 		role: "admin" as const,
 	},
 	moderator: {
-		email: "moderator@chirp.test",
+		email: "moderator@tweep.test",
 		password: "mod123",
 		username: "moderator",
 		displayName: "Moderator User",

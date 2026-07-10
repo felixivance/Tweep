@@ -1,4 +1,4 @@
-import type { CommentResponse } from "@chirp/proto";
+import type { CommentResponse } from "@tweep/proto";
 import { createServerFn } from "@tanstack/react-start";
 import {
 	fromProtoTimestamp,

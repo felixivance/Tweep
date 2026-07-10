@@ -6,7 +6,7 @@
  * Uses sessionStorage so drafts survive in-page navigation but not tab closes.
  */
 
-const DRAFT_KEY = 'chirp-post-draft';
+const DRAFT_KEY = 'tweep-post-draft';
 
 export interface PostDraft {
   content: string;

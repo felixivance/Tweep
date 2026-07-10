@@ -1,4 +1,4 @@
-import type { IUsersService } from "@chirp/proto";
+import type { IUsersService } from "@tweep/proto";
 import { validateSessionToken } from "../../middleware/auth";
 import { getUser, updateProfile } from "../../services/users.service";
 import { toProtoTimestamp } from "../../services/utils";

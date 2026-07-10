@@ -1,5 +1,5 @@
 {
-	"name": "@chirp/shared-types",
+	"name": "@tweep/shared-types",
 	"version": "1.0.0",
 	"private": true,
 	"type": "module",

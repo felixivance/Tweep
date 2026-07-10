@@ -1,5 +1,5 @@
 {
-	"name": "@chirp/db-schema",
+	"name": "@tweep/db-schema",
 	"version": "1.0.0",
 	"private": true,
 	"type": "module",

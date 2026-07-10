@@ -1,10 +1,12 @@
-# Chirp - Social Media Platform
+# Tweep
 
-A Twitter-like social media platform built as a monorepo with TanStack Start, React 19, gRPC, StyleX, and SQLite.
+A full-stack Twitter-style social platform I built to practice (and now showcase) working across a real-world monorepo: TanStack Start, React 19, gRPC, StyleX, Drizzle, and SQLite.
+
+This started life as a timed take-home exercise — a working social app scaffold with a task list on top (add a repost feature, mention autocomplete, infinite scroll, plus a security/performance audit pass). I've since renamed it, stripped the assessment-specific instructions, and kept it around as a reference implementation and interview talking point. Everything in this repo is my own code, written under my own account.
 
 ## Architecture
 
-Chirp is a full-stack monorepo application with:
+Tweep is a full-stack monorepo application with:
 
 - **User App** (`apps/client-user`) - Consumer-facing social media application
 - **Admin App** (`apps/client-admin`) - Administrative dashboard for content moderation
@@ -31,7 +33,7 @@ pnpm run dev
 ### Service URLs
 
 | Service    | URL                   | Description                        |
-| ---------- | --------------------- | ---------------------------------- |
+| ---------- | --------------------- | ----------------------------------- |
 | User App   | http://localhost:3000 | Main social media interface        |
 | Admin App  | http://localhost:3002 | Admin dashboard                    |
 | API Server | http://localhost:3001 | gRPC API (health check at /health) |
@@ -50,7 +52,7 @@ After running the seed script:
 
 ### Admin User
 
-- admin@chirp.com / admin123
+- admin@tweep.com / admin123
 
 ## Features
 
@@ -59,7 +61,8 @@ After running the seed script:
 #### Core Features
 
 - **Authentication** - Email/password registration, login, session management
-- **Posts (Chirps)** - Create, edit (within 5 min), delete text posts (max 280 chars)
+- **Posts** - Create, edit (within 5 min), delete text posts (max 280 chars)
+- **Reposts** - Repost someone else's post to your own profile, with undo and per-post repost counts
 - **Comments** - Add/delete comments, nested threads (1 level deep)
 - **Likes** - Like/unlike posts and comments
 - **User Profiles** - View profiles, edit own profile (name, bio, avatar)
@@ -67,9 +70,10 @@ After running the seed script:
 
 #### Feed & Discovery
 
-- **Home Feed** - Posts from followed users
-- **Explore Feed** - All recent posts
+- **Home Feed** - Infinite-scrolling feed of posts from followed users
+- **Explore Feed** - All recent posts, infinite scroll
 - **Search** - Find posts by content, users by name/username
+- **Mentions Autocomplete** - `@`-triggered dropdown while composing posts, with keyboard navigation and smart trigger detection (won't fire mid-word, e.g. inside an email address)
 
 #### Engagement Features
 
@@ -86,10 +90,14 @@ After running the seed script:
 - **Reports** - Handle user reports on content
 - **Audit Logs** - Track all administrative actions
 
+## Hardening Pass
+
+Alongside the feature work, this repo also went through a round of security and performance fixes — patched dependency CVEs (Drizzle, Elysia, h3, ws, protobufjs, shell-quote, and others), moved `verifyPassword` to a timing-safe comparison, escaped LIKE-wildcard injection in search/admin queries, batched N+1 queries in the notifications endpoint, and enforced a required `SESSION_SECRET` in production. See the commit history for the full list.
+
 ## Project Structure
 
 ```
-chirp/
+tweep/
 ├── apps/
 │   ├── api/                    # gRPC API server
 │   │   ├── src/
@@ -178,7 +186,7 @@ pnpm run test:e2e         # Run E2E tests only (client apps)
 ## Tech Stack
 
 | Category            | Technology                       |
-| ------------------- | -------------------------------- |
+| ------------------- | --------------------------------- |
 | **Monorepo**        | Turborepo + pnpm workspaces      |
 | **Framework**       | TanStack Start (React 19)        |
 | **Language**        | TypeScript (strict mode)         |
@@ -194,7 +202,7 @@ pnpm run test:e2e         # Run E2E tests only (client apps)
 ### Core Tables
 
 - `users` - User accounts and profiles
-- `posts` - User posts/chirps
+- `posts` - User posts (including reposts)
 - `comments` - Post comments
 - `likes` - Post and comment likes
 - `follows` - User follow relationships
@@ -238,7 +246,7 @@ cd apps/client-user && pnpm exec playwright test --ui
 ```bash
 # Clean everything and start fresh
 pnpm run clean
-rm -f chirp.db chirp.db-shm chirp.db-wal
+rm -f tweep.db tweep.db-shm tweep.db-wal
 pnpm install
 pnpm run proto:generate
 pnpm run db:generate

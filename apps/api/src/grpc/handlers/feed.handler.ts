@@ -1,4 +1,4 @@
-import type { IFeedService, PostResponse } from "@chirp/proto";
+import type { IFeedService, PostResponse } from "@tweep/proto";
 import { validateSessionToken } from "../../middleware/auth";
 import { getExploreFeed, getHomeFeed } from "../../services/feed.service";
 import { toProtoTimestamp } from "../../services/utils";

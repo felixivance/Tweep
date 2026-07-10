@@ -14,16 +14,16 @@ if (!_SESSION_SECRET_ENV) {
 		);
 	}
 	console.warn(
-		"[chirp] WARNING: SESSION_SECRET is not set. " +
+		"[tweep] WARNING: SESSION_SECRET is not set. " +
 			"Using an insecure fallback — set SESSION_SECRET before deploying to production.",
 	);
 }
-const SESSION_SECRET = _SESSION_SECRET_ENV ?? "chirp-session-secret-key-at-least-32-chars";
+const SESSION_SECRET = _SESSION_SECRET_ENV ?? "tweep-session-secret-key-at-least-32-chars";
 
 export function useAppSession() {
 	return useSession<SessionData>({
 		password: SESSION_SECRET,
-		name: "chirp-session",
+		name: "tweep-session",
 		cookie: {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",

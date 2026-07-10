@@ -1,4 +1,4 @@
-import type { ILikesService } from "@chirp/proto";
+import type { ILikesService } from "@tweep/proto";
 import { validateSessionToken } from "../../middleware/auth";
 import {
 	getCommentLikeStatus,

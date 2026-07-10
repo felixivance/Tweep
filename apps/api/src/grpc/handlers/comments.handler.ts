@@ -1,4 +1,4 @@
-import type { CommentResponse, ICommentsService } from "@chirp/proto";
+import type { CommentResponse, ICommentsService } from "@tweep/proto";
 import { validateSessionToken } from "../../middleware/auth";
 import { createComment, deleteComment, getPostComments } from "../../services/comments.service";
 import { toProtoTimestamp } from "../../services/utils";

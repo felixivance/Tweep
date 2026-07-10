@@ -4,7 +4,7 @@ import { beforeEach, vi } from "vitest";
 vi.mock("../src/db", async () => {
 	const { drizzle } = await import("drizzle-orm/libsql");
 	const { createClient } = await import("@libsql/client");
-	const schema = await import("@chirp/db-schema");
+	const schema = await import("@tweep/db-schema");
 
 	// Create a unique in-memory database for each test file
 	const client = createClient({

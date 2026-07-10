@@ -1,4 +1,4 @@
-import type { PostResponse } from "@chirp/proto";
+import type { PostResponse } from "@tweep/proto";
 import { createServerFn } from "@tanstack/react-start";
 import {
 	fromProtoTimestamp,

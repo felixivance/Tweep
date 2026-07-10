@@ -1,5 +1,5 @@
 {
-	"name": "@chirp/client-user",
+	"name": "@tweep/client-user",
 	"version": "1.0.0",
 	"private": true,
 	"type": "module",
@@ -16,9 +16,9 @@
 		"test:e2e": "playwright test"
 	},
 	"dependencies": {
-		"@chirp/grpc-client": "workspace:*",
-		"@chirp/proto": "workspace:*",
-		"@chirp/ui": "workspace:*",
+		"@tweep/grpc-client": "workspace:*",
+		"@tweep/proto": "workspace:*",
+		"@tweep/ui": "workspace:*",
 		"@grpc/grpc-js": "^1.12.6",
 		"@stylexjs/stylex": "^0.17.5",
 		"@tanstack/react-devtools": "^0.7.0",

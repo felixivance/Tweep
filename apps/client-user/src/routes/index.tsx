@@ -157,7 +157,7 @@ function HomePage() {
           <div {...stylex.props(styles.welcomeIcon)}>
             <MessageCircle size={40} {...stylex.props(styles.iconWhite)} />
           </div>
-          <h2 {...stylex.props(styles.welcomeTitle)}>Welcome to Chirp</h2>
+          <h2 {...stylex.props(styles.welcomeTitle)}>Welcome to Tweep</h2>
           <p {...stylex.props(styles.welcomeText)}>
             Please log in to view your personalized feed and connect with
             others.

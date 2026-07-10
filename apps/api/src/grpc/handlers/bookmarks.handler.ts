@@ -1,4 +1,4 @@
-import type { IBookmarksService } from "@chirp/proto";
+import type { IBookmarksService } from "@tweep/proto";
 import { validateSessionToken } from "../../middleware/auth";
 import {
 	getBookmarkedPosts,

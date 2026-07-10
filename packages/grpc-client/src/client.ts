@@ -10,16 +10,16 @@ import {
 	PostsServiceClient,
 	SearchServiceClient,
 	UsersServiceClient,
-} from "@chirp/proto";
+} from "@tweep/proto";
 import { ChannelCredentials } from "@grpc/grpc-js";
 import { GrpcTransport } from "@protobuf-ts/grpc-transport";
 
-export interface ChirpClientConfig {
+export interface TweepClientConfig {
 	host: string;
 	secure?: boolean;
 }
 
-export interface ChirpClient {
+export interface TweepClient {
 	auth: AuthServiceClient;
 	posts: PostsServiceClient;
 	comments: CommentsServiceClient;
@@ -35,9 +35,9 @@ export interface ChirpClient {
 }
 
 /**
- * Creates a gRPC client for the Chirp API
+ * Creates a gRPC client for the Tweep API
  */
-export function createChirpClient(config: ChirpClientConfig): ChirpClient {
+export function createTweepClient(config: TweepClientConfig): TweepClient {
 	const { host, secure = false } = config;
 
 	const channelCredentials = secure

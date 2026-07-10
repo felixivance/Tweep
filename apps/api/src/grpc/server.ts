@@ -10,7 +10,7 @@ import {
 	PostsService,
 	SearchService,
 	UsersService,
-} from "@chirp/proto";
+} from "@tweep/proto";
 import { Server, ServerCredentials } from "@grpc/grpc-js";
 import { adaptService } from "@protobuf-ts/grpc-backend";
 import { adminHandler } from "./handlers/admin.handler";

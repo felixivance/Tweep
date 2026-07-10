@@ -1,4 +1,4 @@
-import type { ISearchService, PostResponse } from "@chirp/proto";
+import type { ISearchService, PostResponse } from "@tweep/proto";
 import { validateSessionToken } from "../../middleware/auth";
 import { searchPosts, searchUsers } from "../../services/search.service";
 import { toProtoTimestamp } from "../../services/utils";

@@ -245,7 +245,7 @@ test.describe("User Profile - Comprehensive", () => {
 			await goToProfile(page, "alice");
 
 			// Click on home link or logo
-			const homeLink = page.getByRole("link", { name: /home|chirp/i }).first();
+			const homeLink = page.getByRole("link", { name: /home|tweep/i }).first();
 			await homeLink.click();
 			await waitForHydration(page);
 

@@ -1,4 +1,4 @@
-import type { IPostsService, PostResponse } from "@chirp/proto";
+import type { IPostsService, PostResponse } from "@tweep/proto";
 import { validateSessionToken } from "../../middleware/auth";
 import {
 	createPost,

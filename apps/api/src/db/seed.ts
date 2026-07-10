@@ -56,7 +56,7 @@ async function seed() {
 		// Admin users for client-admin tests
 		{
 			id: generateId(),
-			email: "admin@chirp.test",
+			email: "admin@tweep.test",
 			username: "admin",
 			displayName: "Admin User",
 			password: "admin123",
@@ -65,7 +65,7 @@ async function seed() {
 		},
 		{
 			id: generateId(),
-			email: "moderator@chirp.test",
+			email: "moderator@tweep.test",
 			username: "moderator",
 			displayName: "Moderator User",
 			password: "mod123",

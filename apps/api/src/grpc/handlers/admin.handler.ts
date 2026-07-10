@@ -3,7 +3,7 @@ import type {
 	AuditLogResponse,
 	IAdminService,
 	ReportResponse,
-} from "@chirp/proto";
+} from "@tweep/proto";
 import { requireAdmin, validateSessionToken } from "../../middleware/auth";
 import {
 	banUser,

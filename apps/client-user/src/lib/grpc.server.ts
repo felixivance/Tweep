@@ -1,22 +1,22 @@
-import { type ChirpClient, createChirpClient } from "@chirp/grpc-client";
+import { type TweepClient, createTweepClient } from "@tweep/grpc-client";
 import jwt from "jsonwebtoken";
 import { getSessionData, type SessionData } from "./session.server";
 
 // JWT secret must match the API server
-const JWT_SECRET = process.env.GRPC_JWT_SECRET || "chirp-grpc-jwt-secret-key-at-least-32-chars";
+const JWT_SECRET = process.env.GRPC_JWT_SECRET || "tweep-grpc-jwt-secret-key-at-least-32-chars";
 
 // gRPC API host
 const GRPC_HOST = process.env.GRPC_API_HOST || "localhost:50051";
 
 // Singleton gRPC client
-let grpcClient: ChirpClient | null = null;
+let grpcClient: TweepClient | null = null;
 
 /**
  * Get or create the gRPC client singleton
  */
-export function getGrpcClient(): ChirpClient {
+export function getGrpcClient(): TweepClient {
 	if (!grpcClient) {
-		grpcClient = createChirpClient({
+		grpcClient = createTweepClient({
 			host: GRPC_HOST,
 			secure: process.env.NODE_ENV === "production",
 		});

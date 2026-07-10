@@ -8,12 +8,12 @@ export interface AdminSessionData {
 
 // Session secret - in production, use environment variable
 const SESSION_SECRET =
-	process.env.SESSION_SECRET || "chirp-admin-session-secret-key-at-least-32-chars";
+	process.env.SESSION_SECRET || "tweep-admin-session-secret-key-at-least-32-chars";
 
 export function useAdminSession() {
 	return useSession<AdminSessionData>({
 		password: SESSION_SECRET,
-		name: "chirp-admin-session",
+		name: "tweep-admin-session",
 		cookie: {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",

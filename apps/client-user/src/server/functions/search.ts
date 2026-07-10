@@ -1,4 +1,4 @@
-import type { PostResponse, UserSearchResult } from "@chirp/proto";
+import type { PostResponse, UserSearchResult } from "@tweep/proto";
 import { createServerFn } from "@tanstack/react-start";
 import { fromProtoTimestamp, getGrpcClient, getGrpcSessionToken } from "../../lib/grpc.server";
 
