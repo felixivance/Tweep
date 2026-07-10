@@ -2,7 +2,9 @@
 
 A full-stack Twitter-style social platform I built to practice (and now showcase) working across a real-world monorepo: TanStack Start, React 19, gRPC, StyleX, Drizzle, and SQLite.
 
-This started life as a timed take-home exercise — a working social app scaffold with a task list on top (add a repost feature, mention autocomplete, infinite scroll, plus a security/performance audit pass). I've since renamed it, stripped the assessment-specific instructions, and kept it around as a reference implementation and interview talking point. Everything in this repo is my own code, written under my own account.
+a working social app scaffold with a task list on top (add a repost feature, mention autocomplete, infinite scroll, plus a security/performance audit pass). Written in TypeScript with strict mode enabled, and tested with Vitest (unit) and Playwright (E2E).
+
+Clean architecture, a clear separation of concerns, and a well-defined monorepo structure make this a great reference for building your own full-stack TypeScript applications.
 
 ## Architecture
 
@@ -33,7 +35,7 @@ pnpm run dev
 ### Service URLs
 
 | Service    | URL                   | Description                        |
-| ---------- | --------------------- | ----------------------------------- |
+| ---------- | --------------------- | ---------------------------------- |
 | User App   | http://localhost:3000 | Main social media interface        |
 | Admin App  | http://localhost:3002 | Admin dashboard                    |
 | API Server | http://localhost:3001 | gRPC API (health check at /health) |
@@ -186,7 +188,7 @@ pnpm run test:e2e         # Run E2E tests only (client apps)
 ## Tech Stack
 
 | Category            | Technology                       |
-| ------------------- | --------------------------------- |
+| ------------------- | -------------------------------- |
 | **Monorepo**        | Turborepo + pnpm workspaces      |
 | **Framework**       | TanStack Start (React 19)        |
 | **Language**        | TypeScript (strict mode)         |
